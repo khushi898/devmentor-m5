@@ -62,7 +62,8 @@ function Register(){
                     </form>
 
                     <p className="mt-4 text-centertext-sm">
-                        Already have an Account? <Link to="/register" className="underline">Register</Link>
+                        Already have an Account? <Link to="/login" className="underline">
+                        Login</Link>
                     </p>
                 </CardContent>
             </Card>
