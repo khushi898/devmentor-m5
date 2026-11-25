@@ -1,8 +1,9 @@
-import { FileText } from "lucide-react";
+import { FileText, Trash2 } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "../ui/button";
 
-function DocumentList({ documents,loading,error}){
+function DocumentList({ documents,loading,error,onDelete}){
     if(loading){
         return(
             <div className="space-y-3">
@@ -40,7 +41,12 @@ function DocumentList({ documents,loading,error}){
                             <p className="text-sm text-muted-foreground truncate">{doc.fileName}</p>
                         </div>
                     </div>
-                    <Badge variant="secondary">{doc.status}</Badge>
+                    <div className="flex items-center gap-2 shrink-0">
+  <Badge variant="secondary">{doc.status}</Badge>
+  <Button variant="ghost" size="icon" aria-label={`Delete ${doc.title}`} onClick={() => onDelete(doc._id)}>
+    <Trash2 className="h-4 w-4" />
+  </Button>
+</div>
                 </li>
             ))}
         </ul>
