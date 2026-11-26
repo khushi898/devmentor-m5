@@ -5,9 +5,16 @@ import { Button } from "@/components/ui/button";
 import DocumentList from "@/components/documents/DocumentList";
 import UploadForm from "@/components/documents/UploadForm";
 import ChatList from "@/components/chat/ChatList";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard(){
     const {user,logout}=useAuth();
+    const navigate=useNavigate();
+
+    const handleLogout=()=>{
+        logout();
+        navigate("/login",{replace:true});
+    };
     const [documents,setDocuments]=useState([]);
     const [loading,setLoading]=useState(true);
     const [error,setError]=useState("");
@@ -37,8 +44,8 @@ const handleDelete = async (id) => {
    return (
     <div className="min-h-screen p-4 md:p-8 max-w-4xl mx-auto">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold">Welcome, {user.name}</h1>
-        <Button variant="outline" onClick={logout}>Log out</Button>
+        <h1 className="text-2xl font-bold">Welcome, {user?.name}</h1>
+        <Button variant="outline" onClick={handleLogout}>Log out</Button>
       </div>
 
       <section className="mt-8">
