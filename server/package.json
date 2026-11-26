@@ -7,9 +7,8 @@
     "dev": "nodemon server.js",
     "start": "node server.js"
   },
-  "engines":
-  {
-    "node":">=22"
+  "engines": {
+    "node": ">=22"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +26,8 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.13.1",
     "multer": "^2.5.0",
-    "unpdf": "^2.2.2"
+    "unpdf": "^2.2.2",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
