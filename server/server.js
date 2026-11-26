@@ -10,6 +10,7 @@ import conversationRoutes from "./routes/conversationRoutes.js";
 import flashcardRoutes from "./routes/flashcardRoutes.js";
 import quizRoutes from "./routes/quizRoutes.js";
 import voiceRoutes from "./routes/voiceRoutes.js";
+import taskRoutes from "./routes/taskRoutes.js";
 
 dotenv.config();
 const app=express();
@@ -28,6 +29,7 @@ app.use("/api/conversations",conversationRoutes);
 app.use("/api/flashcards",flashcardRoutes);
 app.use("/api/quizzes",quizRoutes);
 app.use("/api/voice",voiceRoutes);
+app.use("/api/tasks",taskRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
