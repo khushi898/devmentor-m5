@@ -26,20 +26,19 @@ export const deleteChunks = async (userId, documentId) => {
   const index = getIndex(userId);
   await index.documents.delete({ filter: { documentId: { $eq: documentId.toString() } } });
 };
-export const searchChunks = async (userId, query, documentId) => {
+export const searchChunks = async (userId, query, documentId, { topK = 5, minScore = MIN_SCORE } = {}) => {
   const index = getIndex(userId);
 
   const options = {
-    topK: 5,
+    topK,
     scoreBy: [{ type: "embed", fields: ["chunk_text"], query }],
     includeFields: ["chunk_text", "title", "page", "documentId"],
   };
 
   if (documentId) {
-    options.filter = { documentId: { $eq: documentId } };
+    options.filter = { documentId: { $eq: documentId.toString() } };
   }
 
   const results = await index.documents.search(options);
-  return results.matches.filter((match)=>match._score>=MIN_SCORE);
-  return results.matches;
+  return results.matches.filter((match) => match._score >= minScore);
 };

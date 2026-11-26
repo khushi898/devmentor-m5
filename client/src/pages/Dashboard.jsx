@@ -6,6 +6,8 @@ import DocumentList from "@/components/documents/DocumentList";
 import UploadForm from "@/components/documents/UploadForm";
 import ChatList from "@/components/chat/ChatList";
 import { useNavigate } from "react-router-dom";
+import FlashcardGenerator from "@/components/flashcards/FlashcardGenerator";
+import DeckList from "@/components/flashcards/DeckList";
 
 function Dashboard(){
     const {user,logout}=useAuth();
@@ -51,6 +53,12 @@ const handleDelete = async (id) => {
       <section className="mt-8">
         <h2 className="text-lg font-semibold mb-4">Chat with your documents</h2>
         {!loading && <ChatList documents={documents} />}
+      </section>
+
+      <section className="mt-8 space-y-4">
+        <h2 className="text-lg font-semibold mb-4">Flashcards</h2>
+        {!loading && <FlashcardGenerator documents={documents} />}
+        <DeckList />
       </section>
 
       <section className="mt-8 space-y-4">
