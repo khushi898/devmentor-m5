@@ -80,3 +80,31 @@ export const getDeck = async (req, res) => {
   }
   res.json({ deck });
 };
+export const updateCardStatus = async (req, res) => {
+  const { status } = req.body || {};
+  if (!["new", "known", "unknown"].includes(status)) {
+    return res.status(400).json({ message: "Status must be new, known or unknown" });
+  }
+
+  const deck = await FlashcardDeck.findOne({ _id: req.params.id, user: req.user._id });
+  if (!deck) {
+    return res.status(404).json({ message: "Deck not found" });
+  }
+
+  const card = deck.cards.id(req.params.cardId);
+  if (!card) {
+    return res.status(404).json({ message: "Card not found" });
+  }
+
+  card.status = status;
+  await deck.save();
+  res.json({ card });
+};
+
+export const deleteDeck = async (req, res) => {
+  const deck = await FlashcardDeck.findOneAndDelete({ _id: req.params.id, user: req.user._id });
+  if (!deck) {
+    return res.status(404).json({ message: "Deck not found" });
+  }
+  res.json({ message: "Deck deleted" });
+};
