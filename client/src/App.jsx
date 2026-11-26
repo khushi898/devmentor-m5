@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ChatPage from "./pages/ChatPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import FlashcardsPage from "./pages/FlashcardsPage";
 
 function App() {
   return (
@@ -27,6 +28,14 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/flashcards/:id"
+        element={
+          <ProtectedRoute>
+            <FlashcardsPage />
+          </ProtectedRoute>
+        }
+        />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
