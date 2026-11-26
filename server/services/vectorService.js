@@ -1,4 +1,5 @@
 import { Pinecone } from "@pinecone-database/pinecone";
+const MIN_SCORE=0.25;
 
 const getIndex = (userId) => {
   const pc = new Pinecone({ apiKey: process.env.PINECONE_API_KEY });
@@ -24,4 +25,21 @@ export const saveChunks = async (userId, document, chunks) => {
 export const deleteChunks = async (userId, documentId) => {
   const index = getIndex(userId);
   await index.documents.delete({ filter: { documentId: { $eq: documentId.toString() } } });
+};
+export const searchChunks = async (userId, query, documentId) => {
+  const index = getIndex(userId);
+
+  const options = {
+    topK: 5,
+    scoreBy: [{ type: "embed", fields: ["chunk_text"], query }],
+    includeFields: ["chunk_text", "title", "page", "documentId"],
+  };
+
+  if (documentId) {
+    options.filter = { documentId: { $eq: documentId } };
+  }
+
+  const results = await index.documents.search(options);
+  return results.matches.filter((match)=>match._score>=MIN_SCORE);
+  return results.matches;
 };

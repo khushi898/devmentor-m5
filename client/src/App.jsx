@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ChatPage from "./pages/ChatPage";
 
 function App(){
   return(
@@ -15,6 +16,14 @@ function App(){
     </ProtectedRoute>
     }
     />
+    <Route 
+      path="/chat/:id"
+      element={
+        <ProtectedRoute>
+          <ChatPage />
+        </ProtectedRoute>
+      }
+      />
     <Route path="*" element={<Navigate to="/dashboard" />} />
    </Routes>
   );
