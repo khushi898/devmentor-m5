@@ -8,6 +8,8 @@ import ChatList from "@/components/chat/ChatList";
 import { useNavigate } from "react-router-dom";
 import FlashcardGenerator from "@/components/flashcards/FlashcardGenerator";
 import DeckList from "@/components/flashcards/DeckList";
+import GeneratorForm from "@/components/study/GeneratorForm.jsx";
+import QuizList from "@/components/quizzes/QuizList";
 
 function Dashboard(){
     const {user,logout}=useAuth();
@@ -60,6 +62,20 @@ const handleDelete = async (id) => {
         {!loading && <FlashcardGenerator documents={documents} />}
         <DeckList />
       </section>
+      <section className="mt-8 space-y-4">
+  <h2 className="text-lg font-semibold">Quizzes</h2>
+  {!loading && (
+    <GeneratorForm
+      documents={documents}
+      endpoint="/quizzes/generate"
+      getPath={(data) => `/quizzes/${data.quiz._id}`}
+      idPrefix="quiz"
+      buttonText="Generate quiz"
+      loadingText="Generating quiz..."
+    />
+  )}
+  <QuizList />
+</section>
 
       <section className="mt-8 space-y-4">
         <h2 className="text-lg font-semibold">Upload a document</h2>

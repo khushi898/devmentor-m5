@@ -8,6 +8,7 @@ import documentRoutes from "./routes/documentRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import conversationRoutes from "./routes/conversationRoutes.js";
 import flashcardRoutes from "./routes/flashcardRoutes.js";
+import quizRoutes from "./routes/quizRoutes.js";
 
 dotenv.config();
 const app=express();
@@ -24,6 +25,7 @@ app.use("/api/documents",documentRoutes);
 app.use("/api/chat",chatRoutes);
 app.use("/api/conversations",conversationRoutes);
 app.use("/api/flashcards",flashcardRoutes);
+app.use("/api/quizzes",quizRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
