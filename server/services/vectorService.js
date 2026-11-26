@@ -1,4 +1,5 @@
 import { Pinecone } from "@pinecone-database/pinecone";
+const MIN_SCORE=0.25;
 
 const getIndex = (userId) => {
   const pc = new Pinecone({ apiKey: process.env.PINECONE_API_KEY });
@@ -39,5 +40,6 @@ export const searchChunks = async (userId, query, documentId) => {
   }
 
   const results = await index.documents.search(options);
+  return results.matches.filter((match)=>match._score>=MIN_SCORE);
   return results.matches;
 };
