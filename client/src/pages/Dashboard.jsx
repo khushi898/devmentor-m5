@@ -4,6 +4,7 @@ import api from "@/api/axios";
 import { Button } from "@/components/ui/button";
 import DocumentList from "@/components/documents/DocumentList";
 import UploadForm from "@/components/documents/UploadForm";
+import ChatList from "@/components/chat/ChatList";
 
 function Dashboard(){
     const {user,logout}=useAuth();
@@ -33,24 +34,29 @@ const handleDelete = async (id) => {
   }
 };
 
-    return(
-        <div className="min-h-screen p-4 md:p-8 max-w-4xl mx-auto">
-            <div className="flex items-center justify-between gap-4">
-                <h1 className="text-2xl font-bold">Welcome, {user.name}</h1>
-                <Button variant="outline" onClick={logout}>Log out</Button>
-            </div>
+   return (
+    <div className="min-h-screen p-4 md:p-8 max-w-4xl mx-auto">
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="text-2xl font-bold">Welcome, {user.name}</h1>
+        <Button variant="outline" onClick={logout}>Log out</Button>
+      </div>
 
-          <section className="mt-8 space-y-4">
-  <h2 className="text-lg font-semibold">Upload a document</h2>
-  <UploadForm onUploaded={handleUploaded} />
-</section>
+      <section className="mt-8">
+        <h2 className="text-lg font-semibold mb-4">Chat with your documents</h2>
+        {!loading && <ChatList documents={documents} />}
+      </section>
 
-<section className="mt-8">
-  <h2 className="text-lg font-semibold mb-4">Your documents</h2>
-  <DocumentList documents={documents} loading={loading} error={error} onDelete={handleDelete} />
-</section>
-        </div>
-    );
+      <section className="mt-8 space-y-4">
+        <h2 className="text-lg font-semibold">Upload a document</h2>
+        <UploadForm onUploaded={handleUploaded} />
+      </section>
+
+      <section className="mt-8">
+        <h2 className="text-lg font-semibold mb-4">Your documents</h2>
+        <DocumentList documents={documents} loading={loading} error={error} onDelete={handleDelete} />
+      </section>
+    </div>
+  );
 }
 
 export default Dashboard;

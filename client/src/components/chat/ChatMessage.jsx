@@ -10,7 +10,8 @@ function ChatMessage({ message }) {
     .join("");
 
   const sourcesPart = message.parts.find((part) => part.type === "data-sources");
-  const sources = sourcesPart?.data || [];
+  const allSources = sourcesPart?.data || [];
+  const sources = allSources.filter((source) => text.includes(`[${source.id}]`));
 
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
