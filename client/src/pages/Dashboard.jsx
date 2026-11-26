@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react";
+import { useCallback,useEffect,useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import api from "@/api/axios";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,9 @@ import GeneratorForm from "@/components/study/GeneratorForm.jsx";
 import QuizList from "@/components/quizzes/QuizList";
 import VoiceAssistant from "@/components/voice/VoiceAssistant";
 import TaskBoard from "@/components/tasks/TaskBoard.jsx";
+import StudyPlanner from "@/components/agent/StudyPlanner";
+
+
 
 function Dashboard(){
     const {user,logout}=useAuth();
@@ -25,6 +28,7 @@ function Dashboard(){
     const [loading,setLoading]=useState(true);
     const [error,setError]=useState("");
     const[taskRefresh,setTaskRefresh]=useState(0);
+    const refreshTasks=useCallback(()=>setTaskRefresh((n)=>n+1),[]);
     
 
     useEffect(()=>{
@@ -55,8 +59,9 @@ const handleDelete = async (id) => {
         <Button variant="outline" onClick={handleLogout}>Log out</Button>
       </div>
 
-      <section className="mt-8">
+      <section className="mt-8 space-y-4">
         <h2 className="text-lg font-semibold mb-4">Study plan</h2>
+        <StudyPlanner onTasksChanged={refreshTasks} />
         <TaskBoard refreshKey={taskRefresh} />
       </section>
 
