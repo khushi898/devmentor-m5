@@ -11,6 +11,7 @@ import DeckList from "@/components/flashcards/DeckList";
 import GeneratorForm from "@/components/study/GeneratorForm.jsx";
 import QuizList from "@/components/quizzes/QuizList";
 import VoiceAssistant from "@/components/voice/VoiceAssistant";
+import TaskBoard from "@/components/tasks/TaskBoard.jsx";
 
 function Dashboard(){
     const {user,logout}=useAuth();
@@ -23,6 +24,7 @@ function Dashboard(){
     const [documents,setDocuments]=useState([]);
     const [loading,setLoading]=useState(true);
     const [error,setError]=useState("");
+    const[taskRefresh,setTaskRefresh]=useState(0);
     
 
     useEffect(()=>{
@@ -52,6 +54,11 @@ const handleDelete = async (id) => {
         <h1 className="text-2xl font-bold">Welcome, {user?.name}</h1>
         <Button variant="outline" onClick={handleLogout}>Log out</Button>
       </div>
+
+      <section className="mt-8">
+        <h2 className="text-lg font-semibold mb-4">Study plan</h2>
+        <TaskBoard refreshKey={taskRefresh} />
+      </section>
 
       <section className="mt-8">
         <h2 className="text-lg font-semibold mb-4">Chat with your documents</h2>
