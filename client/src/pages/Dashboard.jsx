@@ -10,6 +10,7 @@ import FlashcardGenerator from "@/components/flashcards/FlashcardGenerator";
 import DeckList from "@/components/flashcards/DeckList";
 import GeneratorForm from "@/components/study/GeneratorForm.jsx";
 import QuizList from "@/components/quizzes/QuizList";
+import VoiceAssistant from "@/components/voice/VoiceAssistant";
 
 function Dashboard(){
     const {user,logout}=useAuth();
@@ -55,6 +56,11 @@ const handleDelete = async (id) => {
       <section className="mt-8">
         <h2 className="text-lg font-semibold mb-4">Chat with your documents</h2>
         {!loading && <ChatList documents={documents} />}
+      </section>
+
+      <section className="mt-8">
+        <h2 className="text-lg font-semibold mb-4">Voice mode</h2>
+        {!loading && <VoiceAssistant documents={documents} />}
       </section>
 
       <section className="mt-8 space-y-4">
