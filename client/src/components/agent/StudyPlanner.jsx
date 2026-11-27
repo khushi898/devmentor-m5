@@ -9,7 +9,7 @@ import ToolCallCard from "./ToolCallCard";
 const SUGGESTIONS = [
   "I have 5 days before my React interview, plan my revision",
   "What's on my study schedule this week?",
-  "Mark the task with id 123 as done",
+  "Move my JWT task to tomorrow",
 ];
 
 function StudyPlanner({ onTasksChanged }) {

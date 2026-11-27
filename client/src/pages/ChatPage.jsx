@@ -19,7 +19,7 @@ function ChatPage() {
   return (
     <div className="h-screen flex flex-col max-w-3xl mx-auto">
       <header className="flex items-center justify-between gap-4 border-b p-4">
-        <Link to="/dashboard" className="text-sm underline shrink-0">← Dashboard</Link>
+        <Link to="/dashboard?tab=chat" className="text-sm underline shrink-0">← Dashboard</Link>
         <h1 className="font-semibold truncate">{conversation?.title || "Chat"}</h1>
       </header>
 
