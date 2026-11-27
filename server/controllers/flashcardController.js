@@ -7,6 +7,17 @@ import { searchChunks } from "../services/vectorService.js";
 import { flashcardSetSchema } from "../ai/schemas/flashcardSchema.js";
 import { FLASHCARD_PROMPT } from "../ai/prompts/flashcardPrompt.js";
 
+const INTERVAL_DAYS = { 1: 1, 2: 2, 3: 4, 4: 7, 5: 14 };
+
+const londonToday = () => new Date().toLocaleDateString("en-CA", { timeZone: "Europe/London" });
+
+const addDays = (dateStr, days) => {
+  const date = new Date(`${dateStr}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + days);
+  return date.toISOString().slice(0, 10);
+};
+
+
 export const generateFlashcards = async (req, res) => {
   const { documentId, topic } = req.body || {};
   const cleanTopic = topic?.trim() || "";
@@ -96,6 +107,14 @@ export const updateCardStatus = async (req, res) => {
     return res.status(404).json({ message: "Card not found" });
   }
 
+   const today = londonToday();
+  if (status === "known") {
+    card.box = Math.min((card.box || 1) + 1, 5);
+    card.nextReview = addDays(today, INTERVAL_DAYS[card.box]);
+  } else if (status === "unknown") {
+    card.box = 1;
+    card.nextReview = today;
+  }
   card.status = status;
   await deck.save();
   res.json({ card });

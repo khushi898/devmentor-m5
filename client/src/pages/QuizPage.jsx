@@ -4,6 +4,7 @@ import api from "@/api/axios";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import QuizQuestion from "@/components/quizzes/QuizQuestion";
+import ShareQuizPanel from "@/components/quizzes/ShareQuizPanel";
 
 function QuizPage() {
   const { id } = useParams();
@@ -78,6 +79,8 @@ function QuizPage() {
       {quiz && (
         <>
           <h1 className="text-2xl font-bold">{quiz.title}</h1>
+
+          <ShareQuizPanel quizId={quiz._id} initialPublic={quiz.isPublic} initialShareId={quiz.shareId}/>
 
           {attempt && (
             <div className="border rounded-lg p-4 bg-muted" role="status">

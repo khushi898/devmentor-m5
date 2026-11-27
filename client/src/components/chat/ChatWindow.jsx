@@ -43,7 +43,8 @@ function ChatWindow({ conversation }) {
         )}
 
         {messages.map((message) => (
-          <ChatMessage key={message.id} message={message} />
+          <ChatMessage key={message.id} message={message} conversationId={conversation._id} evaluation={conversation.evaluation?.[message.id]}
+          canCheck={!isBusy} />
         ))}
 
         {status === "submitted" && (

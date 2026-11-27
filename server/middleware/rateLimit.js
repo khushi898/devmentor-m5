@@ -8,3 +8,10 @@ export const aiLimiter=rateLimit({
     legacyHeaders:false,
     message:{ message:"Too many AI requests. Please wait a minute and try again."},
 });
+export const publicLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: 30,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  message: { message: "Too many requests. Please wait a minute and try again." },
+});

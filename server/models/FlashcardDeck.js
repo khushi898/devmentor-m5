@@ -5,6 +5,8 @@ const cardSchema = new mongoose.Schema({
   answer: { type: String, required: true },
   page: { type: Number },
   status: { type: String, enum: ["new", "known", "unknown"], default: "new" },
+  box:{type:Number,default:1,min:1,max:5},
+  nextReview:{type:String,default:""},
 });
 
 const flashcardDeckSchema = new mongoose.Schema(

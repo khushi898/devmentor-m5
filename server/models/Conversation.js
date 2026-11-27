@@ -6,6 +6,7 @@ const conversationSchema = new mongoose.Schema(
     title: { type: String, default: "New chat" },
     documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document", default: null },
     messages: { type: Array, default: [] },
+    evaluations:{type:mongoose.Schema.Types.Mixed, default:{}},
   },
   { timestamps: true }
 );

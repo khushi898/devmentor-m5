@@ -6,6 +6,7 @@ import ChatPage from "./pages/ChatPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import FlashcardsPage from "./pages/FlashcardsPage";
 import QuizPage from "./pages/QuizPage";
+import SharedQuizPage from "./pages/SharedQuizPage";
 
 function App() {
   return (
@@ -45,6 +46,10 @@ function App() {
               <QuizPage />
             </ProtectedRoute>
           }/>
+
+          <Route 
+          path="/shared/quiz/:shareId"
+          element={<SharedQuizPage />}/>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
