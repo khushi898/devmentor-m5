@@ -2,8 +2,11 @@ import { useState } from "react";
 import api from "@/api/axios";
 import { Button } from "@/components/ui/button";
 
+const todayString = () => new Date().toLocaleDateString("en-CA");
+const isDue = (card) => !card.nextReview || card.nextReview <= todayString();
+
 function FlashcardReview({ deck, onDeckChange }) {
-  const [queue, setQueue] = useState(() => deck.cards.filter((c) => c.status !== "known"));
+  const [queue, setQueue] = useState(() => deck.cards.filter(isDue));
   const [flipped, setFlipped] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -14,9 +17,9 @@ function FlashcardReview({ deck, onDeckChange }) {
     setSaving(true);
     setError("");
     try {
-      await api.patch(`/flashcards/${deck._id}/cards/${card._id}`, { status });
-      onDeckChange(card._id, status);
-      setQueue((prev) => (status === "known" ? prev.slice(1) : [...prev.slice(1), prev[0]]));
+      const res = await api.patch(`/flashcards/${deck._id}/cards/${card._id}`, { status });
+      onDeckChange(res.data.card);
+      setQueue((prev) => (status === "known" ? prev.slice(1) : [...prev.slice(1), res.data.card]));
       setFlipped(false);
     } catch {
       setError("Could not save your answer. Please try again.");
@@ -31,17 +34,34 @@ function FlashcardReview({ deck, onDeckChange }) {
   };
 
   if (!card) {
+    const upcoming = deck.cards
+      .map((c) => c.nextReview)
+      .filter((d) => d && d > todayString())
+      .sort()[0];
+
     return (
       <div className="border rounded-lg p-8 text-center space-y-3">
-        <p className="text-lg font-semibold">🎉 You know every card in this deck!</p>
-        <Button variant="outline" onClick={restart}>Review all cards again</Button>
+        <p className="text-lg font-semibold">🎉 All caught up for today!</p>
+        {upcoming && (
+          <p className="text-sm text-muted-foreground">
+            Next review:{" "}
+            {new Date(`${upcoming}T00:00:00`).toLocaleDateString("en-GB", {
+              weekday: "short",
+              day: "numeric",
+              month: "short",
+            })}
+          </p>
+        )}
+        <Button variant="outline" onClick={restart}>Review all cards anyway</Button>
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-muted-foreground">{queue.length} card(s) left in your review queue</p>
+      <p className="text-sm text-muted-foreground">
+        {queue.length} card(s) due for review · Box {card.box || 1} of 5
+      </p>
 
       <button
         type="button"

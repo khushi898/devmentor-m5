@@ -18,10 +18,10 @@ function FlashcardsPage() {
       .catch(() => setError("This deck could not be found."));
   }, [id]);
 
-  const handleDeckChange = (cardId, status) => {
+  const handleDeckChange = (updatedCard) => {
     setDeck((prev) => ({
       ...prev,
-      cards: prev.cards.map((c) => (c._id === cardId ? { ...c, status } : c)),
+      cards: prev.cards.map((c) => (c._id === updatedCard._id ? updatedCard : c)),
     }));
   };
 
