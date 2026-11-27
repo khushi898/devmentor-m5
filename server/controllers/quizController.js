@@ -150,3 +150,11 @@ export const getAttempts = async (req, res) => {
     .sort({ createdAt: -1 });
   res.json({ attempts });
 };
+export const deleteQuiz=async(req ,res)=>{
+    const quiz=await Quiz.findOneAndDelete({ _id:req.params.id,user:req.user._id});
+    if(!quiz){
+        return res.status(404).json({message:"Quiz not found!"});
+    }
+    await QuizAttempt.deleteMany({quiz:quiz._id,user:req.user._id});
+    res.json({message:"Quiz deleted"});
+};

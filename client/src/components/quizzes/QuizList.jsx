@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ListChecks } from "lucide-react";
+import { ListChecks,Trash2 } from "lucide-react";
 import api from "@/api/axios";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "../ui/button";
 
 function QuizList() {
   const [quizzes, setQuizzes] = useState([]);
@@ -17,6 +18,16 @@ function QuizList() {
       .finally(() => setLoading(false));
   }, []);
 
+  const deleteQuiz=async(id)=>{
+    if(!window.confirm("Deletethis quiz and its attempts?"));
+    return;
+    try{
+        await api.delete(`/quizzes/${id}`);
+        setQuizzes((prev)=>prev.filter((q)=>q._id==id));
+    }catch{
+        setError("Could not delete the quiz. Please try after");
+    }
+  };
   if (loading) {
     return (
       <div className="space-y-2">
@@ -35,14 +46,17 @@ function QuizList() {
   return (
     <ul className="space-y-2">
       {quizzes.map((quiz) => (
-        <li key={quiz._id}>
-          <Link to={`/quizzes/${quiz._id}`} className="flex items-center justify-between gap-3 border rounded-lg p-3 hover:bg-muted">
+       <li key={quiz._id} className="flex items-center gap-2">
+          <Link to={`/quizzes/${quiz._id}`} className="flex-1 min-w-0 flex items-center justify-between gap-3 border rounded-lg p-3 hover:bg-muted">
             <div className="flex items-center gap-3 min-w-0">
               <ListChecks className="h-4 w-4 shrink-0 text-muted-foreground" />
               <p className="font-medium truncate">{quiz.title}</p>
             </div>
             <span className="text-xs text-muted-foreground shrink-0">{quiz.total} questions</span>
           </Link>
+          <Button variant="ghost" size="icon" aria-label={`Delete quiz ${quiz.title}`} onClick={() => deleteQuiz(quiz._id)}>
+            <Trash2 className="h-4 w-4" />
+          </Button>
         </li>
       ))}
     </ul>

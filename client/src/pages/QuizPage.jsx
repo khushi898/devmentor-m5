@@ -63,7 +63,7 @@ function QuizPage() {
 
   return (
     <div className="min-h-screen p-4 md:p-8 max-w-2xl mx-auto space-y-6">
-      <Link to="/dashboard" className="text-sm underline">← Dashboard</Link>
+      <Link to="/dashboard?tab=quizzes" className="text-sm underline">← Dashboard</Link>
 
       {error && <p role="alert" className="text-destructive">{error}</p>}
 

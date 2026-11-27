@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Layers } from "lucide-react";
 import api from "@/api/axios";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "../ui/button";
+import { Trash2 } from "lucide-react";
 
 function DeckList() {
   const [decks, setDecks] = useState([]);
@@ -16,6 +18,16 @@ function DeckList() {
       .catch(() => setError("Could not load your flashcard decks."))
       .finally(() => setLoading(false));
   }, []);
+  const deleteDeck=async(id)=>{
+    if(!window.confirm("Delete this flashcard deck?"))
+        return;
+    try{
+        await api.delete(`/flashcards/${id}`);
+        setDecks((prev)=>prev.filter((d)=>d._id!==id));
+    }catch{
+        setError("Could not delete the deck. Please try after.");
+    }
+  };
 
   if (loading) {
     return (
@@ -37,16 +49,17 @@ function DeckList() {
       {decks.map((deck) => {
         const known = deck.cards.filter((c) => c.status === "known").length;
         return (
-          <li key={deck._id}>
-            <Link to={`/flashcards/${deck._id}`} className="flex items-center justify-between gap-3 border rounded-lg p-3 hover:bg-muted">
+         <li key={deck._id} className="flex items-center gap-2">
+            <Link to={`/flashcards/${deck._id}`} className="flex-1 min-w-0 flex items-center justify-between gap-3 border rounded-lg p-3 hover:bg-muted">
               <div className="flex items-center gap-3 min-w-0">
                 <Layers className="h-4 w-4 shrink-0 text-muted-foreground" />
                 <p className="font-medium truncate">{deck.title}</p>
               </div>
-              <span className="text-xs text-muted-foreground shrink-0">
-                {known}/{deck.cards.length} known
-              </span>
+              <span className="text-xs text-muted-foreground shrink-0">{known}/{deck.cards.length} known</span>
             </Link>
+            <Button variant="ghost" size="icon" aria-label={`Delete deck ${deck.title}`} onClick={() => deleteDeck(deck._id)}>
+              <Trash2 className="h-4 w-4" />
+            </Button>
           </li>
         );
       })}
