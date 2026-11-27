@@ -12,6 +12,7 @@ import quizRoutes from "./routes/quizRoutes.js";
 import voiceRoutes from "./routes/voiceRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import agentRoutes from "./routes/agentRoutes.js";
+import publicRoutes from "./routes/publicRoutes.js";
 
 dotenv.config();
 const app=express();
@@ -32,6 +33,7 @@ app.use("/api/quizzes",quizRoutes);
 app.use("/api/voice",voiceRoutes);
 app.use("/api/tasks",taskRoutes);
 app.use("/api/agent",agentRoutes);
+app.use("/api/public",publicRoutes);
 app.use(notFound);
 app.use(errorHandler);
 

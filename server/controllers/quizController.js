@@ -7,6 +7,8 @@ import { searchChunks } from "../services/vectorService.js";
 import { quizSchema } from "../ai/schemas/quizSchema.js";
 import { QUIZ_PROMPT } from "../ai/prompts/quizPrompt.js";
 import QuizAttempt from "../models/QuizAttempt.js";
+import crypto from "crypto";
+import { validAnswers,gradeQuiz } from "../services/taskService.js";
 
 const hideAnswers = (quiz) => ({
   _id: quiz._id,
@@ -14,6 +16,8 @@ const hideAnswers = (quiz) => ({
   topic: quiz.topic,
   document: quiz.document,
   createdAt: quiz.createdAt,
+  isPublic:quiz.isPublic,
+  shareId:quiz.isPublic?quiz.shareId:null,
   questions: quiz.questions.map((q) => ({
     _id: q._id,
     question: q.question,
@@ -112,34 +116,13 @@ export const submitAttempt = async (req, res) => {
     return res.status(404).json({ message: "Quiz not found" });
   }
 
-  const isValid =
-    Array.isArray(answers) &&
-    answers.length === quiz.questions.length &&
-    answers.every((a) => Number.isInteger(a) && a >= 0 && a <= 3);
-
-  if (!isValid) {
+  if (!validAnswers(quiz, answers)) {
     return res.status(400).json({ message: "Answer every question before submitting" });
   }
 
-  const results = quiz.questions.map((q, i) => ({
-    question: q.question,
-    options: q.options,
-    selected: answers[i],
-    correctIndex: q.correctIndex,
-    correct: answers[i] === q.correctIndex,
-    explanation: q.explanation,
-    page: q.page,
-  }));
+  const { results, score, total } = gradeQuiz(quiz, answers);
 
-  const score = results.filter((r) => r.correct).length;
-
-  const attempt = await QuizAttempt.create({
-    user: req.user._id,
-    quiz: quiz._id,
-    answers,
-    score,
-    total: quiz.questions.length,
-  });
+  const attempt = await QuizAttempt.create({ user: req.user._id, quiz: quiz._id, answers, score, total });
 
   res.status(201).json({ attempt, results });
 };
@@ -157,4 +140,21 @@ export const deleteQuiz=async(req ,res)=>{
     }
     await QuizAttempt.deleteMany({quiz:quiz._id,user:req.user._id});
     res.json({message:"Quiz deleted"});
+};
+
+export const setQuizSharing = async (req, res) => {
+  const { enabled } = req.body || {};
+
+  const quiz = await Quiz.findOne({ _id: req.params.id, user: req.user._id });
+  if (!quiz) {
+    return res.status(404).json({ message: "Quiz not found" });
+  }
+
+  quiz.isPublic = Boolean(enabled);
+  if (quiz.isPublic && !quiz.shareId) {
+    quiz.shareId = crypto.randomUUID();
+  }
+  await quiz.save();
+
+  res.json({ isPublic: quiz.isPublic, shareId: quiz.isPublic ? quiz.shareId : null });
 };

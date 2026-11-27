@@ -15,6 +15,8 @@ const quizSchema=new mongoose.Schema(
         document:{type:mongoose.Schema.Types.ObjectId,ref:"Document",default:null},
         title:{type:String,required:true},
         topic:{type:String,default:""},
+        isPublic:{type:Boolean, default:false},
+        shareId:{type:String,unique:true,sparse:true},
         questions:[questionSchema],
     },
     {timestamps:true}
